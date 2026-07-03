@@ -1,0 +1,52 @@
+{
+  "name": "marksync-pdf",
+  "version": "1.0.9",
+  "description": "A modern Markdown to PDF converter app.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder build --win"
+  },
+  "keywords": [
+    "markdown",
+    "pdf",
+    "electron"
+  ],
+  "author": "JCTool",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "highlight.js": "^11.9.0",
+    "katex": "^0.16.10",
+    "marked": "^12.0.2",
+    "mermaid": "^11.16.0"
+  },
+  "devDependencies": {
+    "electron": "^30.0.0",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.marksyncpdf.app",
+    "productName": "MarkSync PDF",
+    "compression": "maximum",
+    "directories": {
+      "buildResources": "build"
+    },
+    "icon": "build/icon.ico",
+    "files": [
+      "**/*",
+      "!dist",
+      "!Markdown to PDF App_Portable",
+      "!Installers",
+      "!**/*.map",
+      "!**/*.ts",
+      "!node_modules/**/*.md",
+      "!node_modules/mermaid/src",
+      "!node_modules/mermaid/dist/mermaid.js"
+    ],
+    "win": {
+      "target": "nsis",
+      "artifactName": "Install.exe",
+	  "icon": "build/icon.ico"
+    }
+  }
+}

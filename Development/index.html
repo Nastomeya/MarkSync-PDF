@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Markdown to PDF Converter</title>
+  
+  <!-- Local Styles -->
+  <link rel="stylesheet" href="node_modules/katex/dist/katex.min.css">
+  <link rel="stylesheet" href="node_modules/highlight.js/styles/atom-one-dark.css">
+  <link rel="stylesheet" href="styles.css">
+  <script src="node_modules/marked/marked.min.js"></script>
+</head>
+<body>
+  
+  <div class="app-container">
+    <header class="app-header">
+      <div class="brand">
+        <img src="assets/icon.png" width="24" height="24" alt="MarkSync Logo" style="object-fit: contain;">
+        <h1>MarkSync PDF</h1>
+        <span class="version-tag" id="appVersion">v1.0.9</span>
+      </div>
+      <div class="header-actions" style="display: flex; gap: 12px; -webkit-app-region: no-drag;">
+        <button id="helpBtn" class="btn-secondary" style="display: flex; align-items: center; gap: 8px;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+          Help Manual
+        </button>
+        <button id="exportBtn" class="btn-primary">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          Export PDF
+        </button>
+      </div>
+    </header>
+
+    <div class="toolbar">
+      <div class="toolbar-group">
+        <span class="toolbar-label">Format Preview & PDF</span>
+        <div class="control-item">
+          <label for="fontSizeSlider">Font Size</label>
+          <input type="range" id="fontSizeSlider" min="12" max="28" value="16">
+          <span class="control-val" id="fontSizeVal">16px</span>
+        </div>
+        <div class="control-item">
+          <label for="lineHeightSlider">Line Spacing</label>
+          <input type="range" id="lineHeightSlider" min="12" max="30" value="17" step="1">
+          <span class="control-val" id="lineHeightVal">1.7</span>
+        </div>
+        <div class="control-item">
+          <label for="paraGapSlider">Paragraph Gap</label>
+          <input type="range" id="paraGapSlider" min="4" max="40" value="16" step="1">
+          <span class="control-val" id="paraGapVal">16px</span>
+        </div>
+      </div>
+    </div>
+
+    <main class="workspace">
+      <div class="editor-pane">
+        <textarea id="markdownInput" placeholder="Type your Markdown here...
+
+Support for:
+- **Bold**, *Italics*
+- Code blocks
+- Math equations: $\\sqrt{a^2 + b^2} = c$
+
+```javascript
+console.log('Hello World');
+```
+"></textarea>
+      </div>
+      
+      <div class="resizer" id="resizer"></div>
+
+      <div class="preview-pane">
+        <div id="previewOutput" class="markdown-body"></div>
+      </div>
+    </main>
+  </div>
+
+  <div id="pdfModal" class="modal hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>PDF Preview</h2>
+        <div class="modal-actions">
+          <button id="savePdfBtn" class="btn-primary">Save to PC</button>
+          <button id="closePdfBtn" class="btn-secondary">Close Preview</button>
+        </div>
+      </div>
+      <div class="modal-body">
+        <webview id="pdfWebview" plugins style="width: 100%; height: 100%; border: none; background: white;"></webview>
+      </div>
+    </div>
+  </div>
+
+  <div id="helpModal" class="modal hidden">
+    <div class="modal-content" style="max-width: 800px; height: 85%;">
+      <div class="modal-header">
+        <h2>User Manual & Cheat Sheet</h2>
+        <div class="modal-actions">
+          <button id="closeHelpBtn" class="btn-secondary">Close Manual</button>
+        </div>
+      </div>
+      <div class="modal-body" style="overflow-y: auto; background: var(--bg-preview); padding: 32px 48px;">
+        <div id="helpContent" class="markdown-body"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>
