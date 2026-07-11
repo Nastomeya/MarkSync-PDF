@@ -276,6 +276,67 @@ body {
   font-style: italic;
 }
 
+/* GitHub-style Alerts */
+.markdown-body .markdown-alert {
+  padding: 8px 16px;
+  margin-bottom: var(--md-para-gap);
+  color: inherit;
+  border-left: 4px solid;
+  border-radius: 0;
+  background-color: transparent;
+  font-style: normal;
+}
+
+.markdown-body .markdown-alert .markdown-alert-title {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  margin-bottom: 8px;
+  font-size: 1rem;
+}
+
+.markdown-body .markdown-alert .markdown-alert-title svg {
+  margin-right: 8px;
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+.markdown-body .markdown-alert-note {
+  border-left-color: #2f81f7;
+}
+.markdown-body .markdown-alert-note .markdown-alert-title {
+  color: #2f81f7;
+}
+
+.markdown-body .markdown-alert-tip {
+  border-left-color: #3fb950;
+}
+.markdown-body .markdown-alert-tip .markdown-alert-title {
+  color: #3fb950;
+}
+
+.markdown-body .markdown-alert-important {
+  border-left-color: #ab7df8;
+}
+.markdown-body .markdown-alert-important .markdown-alert-title {
+  color: #ab7df8;
+}
+
+.markdown-body .markdown-alert-warning {
+  border-left-color: #d29922;
+}
+.markdown-body .markdown-alert-warning .markdown-alert-title {
+  color: #d29922;
+}
+
+.markdown-body .markdown-alert-caution {
+  border-left-color: #f85149;
+}
+.markdown-body .markdown-alert-caution .markdown-alert-title {
+  color: #f85149;
+}
+
 .markdown-body ul, .markdown-body ol {
   margin-bottom: var(--md-para-gap);
   padding-left: 2em;
@@ -475,6 +536,7 @@ body {
   /* Avoid breaking inside important elements */
   .markdown-body pre,
   .markdown-body blockquote,
+  .markdown-body .markdown-alert,
   .markdown-body table,
   .markdown-body .mermaid {
     page-break-inside: avoid;
@@ -487,6 +549,22 @@ body {
     margin: var(--md-para-gap) 0 !important;
     padding: 0 !important;
   }
+  
+  /* Make sure alert colors persist in print */
+  .markdown-body .markdown-alert-note { border-left-color: #2f81f7 !important; }
+  .markdown-body .markdown-alert-note .markdown-alert-title { color: #2f81f7 !important; }
+  
+  .markdown-body .markdown-alert-tip { border-left-color: #3fb950 !important; }
+  .markdown-body .markdown-alert-tip .markdown-alert-title { color: #3fb950 !important; }
+  
+  .markdown-body .markdown-alert-important { border-left-color: #ab7df8 !important; }
+  .markdown-body .markdown-alert-important .markdown-alert-title { color: #ab7df8 !important; }
+  
+  .markdown-body .markdown-alert-warning { border-left-color: #d29922 !important; }
+  .markdown-body .markdown-alert-warning .markdown-alert-title { color: #d29922 !important; }
+  
+  .markdown-body .markdown-alert-caution { border-left-color: #f85149 !important; }
+  .markdown-body .markdown-alert-caution .markdown-alert-title { color: #f85149 !important; }
   
   /* Avoid orphan headings */
   .markdown-body h1,
