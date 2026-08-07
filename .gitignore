@@ -1,3 +1,4 @@
-node_modules/
+[Nn]ode_modules/
 *.log
 .DS_Store
+[Dd]ist/

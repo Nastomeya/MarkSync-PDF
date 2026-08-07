@@ -1,6 +1,6 @@
 {
   "name": "marksync-pdf",
-  "version": "1.0.9",
+  "version": "1.2.1",
   "description": "A modern Markdown to PDF converter app.",
   "main": "main.js",
   "scripts": {

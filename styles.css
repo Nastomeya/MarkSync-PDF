@@ -68,6 +68,34 @@ body {
   display: inline-block;
 }
 
+.author-link {
+  -webkit-app-region: no-drag;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-decoration: none;
+  margin-left: 16px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.2s ease;
+}
+
+.author-link img {
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.author-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--text-main);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
 .btn-primary {
   -webkit-app-region: no-drag;
   display: flex;
