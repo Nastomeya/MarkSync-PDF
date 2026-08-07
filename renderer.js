@@ -299,6 +299,8 @@ async function init() {
   // Formatting Sliders
   const fontSizeSlider = document.getElementById('fontSizeSlider');
   const fontSizeVal = document.getElementById('fontSizeVal');
+  const titleSizeSlider = document.getElementById('titleSizeSlider');
+  const titleSizeVal = document.getElementById('titleSizeVal');
   const lineHeightSlider = document.getElementById('lineHeightSlider');
   const lineHeightVal = document.getElementById('lineHeightVal');
   const paraGapSlider = document.getElementById('paraGapSlider');
@@ -306,19 +308,23 @@ async function init() {
 
   function updateTypography() {
     const fontSize = fontSizeSlider.value;
+    const titleSize = titleSizeSlider.value;
     const lineHeight = (lineHeightSlider.value / 10).toFixed(1);
     const paraGap = paraGapSlider.value;
 
     fontSizeVal.innerText = `${fontSize}px`;
+    titleSizeVal.innerText = `${titleSize}em`;
     lineHeightVal.innerText = lineHeight;
     paraGapVal.innerText = `${paraGap}px`;
 
     output.style.setProperty('--md-font-size', `${fontSize}px`);
+    output.style.setProperty('--md-title-size', `${titleSize}em`);
     output.style.setProperty('--md-line-height', lineHeight);
     output.style.setProperty('--md-para-gap', `${paraGap}px`);
   }
 
   fontSizeSlider.addEventListener('input', updateTypography);
+  titleSizeSlider.addEventListener('input', updateTypography);
   lineHeightSlider.addEventListener('input', updateTypography);
   paraGapSlider.addEventListener('input', updateTypography);
 

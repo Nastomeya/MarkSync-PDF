@@ -226,6 +226,7 @@ body {
   
   /* Styling variables dynamically controlled by JS */
   --md-font-size: 16px;
+  --md-title-size: 2.2em;
   --md-line-height: 1.7;
   --md-para-gap: 16px;
   
@@ -240,8 +241,10 @@ body {
   font-weight: 600;
 }
 
-.markdown-body h1 { font-size: 2.2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.3em; }
-.markdown-body h2 { font-size: 1.8rem; }
+.markdown-body h1 { font-size: var(--md-title-size); border-bottom: 1px solid var(--border-color); padding-bottom: 0.3em; }
+.markdown-body h2 { font-size: calc(var(--md-title-size) * 0.818); }
+.markdown-body h3 { font-size: calc(var(--md-title-size) * 0.65); }
+.markdown-body h4 { font-size: calc(var(--md-title-size) * 0.55); }
 .markdown-body p { margin-bottom: var(--md-para-gap); }
 .markdown-body a { color: var(--accent); text-decoration: none; transition: color 0.2s; }
 .markdown-body a:hover { color: var(--accent-hover); text-decoration: underline; }
