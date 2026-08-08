@@ -306,6 +306,8 @@ async function init() {
   const paraGapSlider = document.getElementById('paraGapSlider');
   const paraGapVal = document.getElementById('paraGapVal');
 
+  const hideTableBorders = document.getElementById('hideTableBorders');
+
   function updateTypography() {
     const fontSize = fontSizeSlider.value;
     const titleSize = titleSizeSlider.value;
@@ -327,6 +329,14 @@ async function init() {
   titleSizeSlider.addEventListener('input', updateTypography);
   lineHeightSlider.addEventListener('input', updateTypography);
   paraGapSlider.addEventListener('input', updateTypography);
+
+  hideTableBorders.addEventListener('change', (e) => {
+    if (e.target.checked) {
+      output.classList.add('hide-table-borders');
+    } else {
+      output.classList.remove('hide-table-borders');
+    }
+  });
 
   // Set initial slider values
   updateTypography();

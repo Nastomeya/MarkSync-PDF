@@ -409,6 +409,15 @@ body {
   font-weight: 600;
 }
 
+.markdown-body.hide-table-borders th,
+.markdown-body.hide-table-borders td {
+  border: none;
+}
+
+.markdown-body.hide-table-borders th {
+  background-color: transparent;
+}
+
 .markdown-body > *:first-child {
   margin-top: 0 !important;
 }
@@ -562,6 +571,15 @@ body {
 
   .markdown-body th {
     background-color: #f6f8fa !important;
+  }
+
+  .markdown-body.hide-table-borders th, 
+  .markdown-body.hide-table-borders td {
+    border: none !important;
+  }
+  
+  .markdown-body.hide-table-borders th {
+    background-color: transparent !important;
   }
 
   /* Avoid breaking inside important elements */
