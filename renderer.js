@@ -1,4 +1,4 @@
-const { ipcRenderer } = require('electron');
+const { ipcRenderer, clipboard } = require('electron');
 const fs = require('fs');
 const path = require('path');
 const hljs = require('highlight.js');
@@ -82,7 +82,14 @@ async function init() {
         }
         const language = hljs.getLanguage(infostring) ? infostring : 'plaintext';
         const highlighted = hljs.highlight(code, { language }).value;
-        return `<pre><code class="hljs language-${language}">${highlighted}</code></pre>\n`;
+        return `<div class="code-block-wrapper">
+          <button class="copy-code-btn" type="button" aria-label="Copy syntax" title="Copy syntax">
+            <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span class="copy-text">Copied!</span>
+          </button>
+          <pre><code class="hljs language-${language}">${highlighted}</code></pre>
+        </div>\n`;
       },
       blockquote(quote) {
         const match = quote.match(/^<p>\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]\s*(?:<br>\n?|<\/p>\n?<p>)?/i);
@@ -268,6 +275,43 @@ async function init() {
   closeHelpBtn.addEventListener('click', () => {
     helpModal.classList.add('hidden');
     helpContent.innerHTML = ''; // Clear memory/DOM
+  });
+
+  // Delegated handler for code snippet copy buttons
+  document.addEventListener('click', async (e) => {
+    const copyBtn = e.target.closest('.copy-code-btn');
+    if (!copyBtn) return;
+
+    const wrapper = copyBtn.closest('.code-block-wrapper');
+    if (!wrapper) return;
+
+    const codeEl = wrapper.querySelector('pre code');
+    if (!codeEl) return;
+
+    const textToCopy = codeEl.textContent;
+
+    try {
+      if (clipboard && clipboard.writeText) {
+        clipboard.writeText(textToCopy);
+      } else if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(textToCopy);
+      }
+
+      if (copyBtn._copyTimeout) {
+        clearTimeout(copyBtn._copyTimeout);
+      }
+
+      copyBtn.classList.add('copied');
+      copyBtn.setAttribute('title', 'Copied!');
+
+      copyBtn._copyTimeout = setTimeout(() => {
+        copyBtn.classList.remove('copied');
+        copyBtn.setAttribute('title', 'Copy syntax');
+        delete copyBtn._copyTimeout;
+      }, 2000);
+    } catch (err) {
+      console.error('Failed to copy syntax code:', err);
+    }
   });
 
   // Drag and drop support

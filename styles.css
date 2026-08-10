@@ -285,6 +285,11 @@ body {
   font-size: 0.9em;
 }
 
+.markdown-body .code-block-wrapper {
+  position: relative;
+  margin-bottom: var(--md-para-gap);
+}
+
 .markdown-body pre {
   background: var(--bg-main) !important;
   padding: 16px;
@@ -294,9 +299,83 @@ body {
   margin-bottom: var(--md-para-gap);
 }
 
+.markdown-body .code-block-wrapper pre {
+  margin-bottom: 0;
+  padding-right: 60px;
+}
+
 .markdown-body pre code {
   background: transparent;
   padding: 0;
+}
+
+.markdown-body .copy-code-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 8px;
+  background: rgba(31, 41, 55, 0.75);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  z-index: 5;
+  transition: all 0.2s ease;
+  user-select: none;
+  -webkit-user-select: none;
+  opacity: 0.6;
+}
+
+.markdown-body .code-block-wrapper:hover .copy-code-btn,
+.markdown-body .copy-code-btn:focus,
+.markdown-body .copy-code-btn.copied {
+  opacity: 1;
+}
+
+.markdown-body .copy-code-btn:hover {
+  background: rgba(55, 65, 81, 0.95);
+  color: var(--text-main);
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.markdown-body .copy-code-btn:active {
+  transform: translateY(0);
+}
+
+.markdown-body .copy-code-btn .check-icon,
+.markdown-body .copy-code-btn .copy-text {
+  display: none;
+}
+
+.markdown-body .copy-code-btn.copied {
+  background: rgba(16, 185, 129, 0.18);
+  border-color: rgba(16, 185, 129, 0.45);
+  color: #34d399;
+}
+
+.markdown-body .copy-code-btn.copied .copy-icon {
+  display: none;
+}
+
+.markdown-body .copy-code-btn.copied .check-icon {
+  display: inline-block;
+  color: #34d399;
+}
+
+.markdown-body .copy-code-btn.copied .copy-text {
+  display: inline-block;
+  color: #34d399;
+  font-weight: 600;
 }
 
 .markdown-body blockquote {
@@ -377,13 +456,18 @@ body {
   margin-bottom: calc(var(--md-para-gap) * 0.25);
 }
 
+.markdown-body li:has(> input[type="checkbox"]),
+.markdown-body li:has(> p > input[type="checkbox"]),
 .markdown-body .task-list-item {
   list-style-type: none;
+  margin-left: -1em;
 }
 
-.markdown-body .task-list-item input {
-  margin: 0 0.25em 0.25em -1.4em;
+.markdown-body input[type="checkbox"] {
+  margin-right: 0.45em;
   vertical-align: middle;
+  accent-color: var(--accent);
+  cursor: default;
 }
 
 .markdown-body hr {
@@ -517,7 +601,7 @@ body {
   
   body {
     background: white !important;
-    color: black !important;
+    color: #1e293b !important;
   }
   
   .app-header, .editor-pane, .resizer, .toolbar, .modal {
@@ -530,30 +614,143 @@ body {
   }
 
   .markdown-body {
-    color: black !important;
+    color: #1e293b !important;
     max-width: none !important;
   }
 
   .markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4 {
-    color: black !important;
+    color: #0f172a !important;
+    font-weight: 700 !important;
+  }
+
+  .markdown-body h1 {
+    border-bottom: 2px solid #e2e8f0 !important;
+    padding-bottom: 0.3em !important;
   }
 
   .markdown-body a {
     color: #0969da !important;
+    text-decoration: underline !important;
+  }
+
+  .markdown-body .copy-code-btn,
+  .copy-code-btn {
+    display: none !important;
+  }
+
+  .markdown-body .code-block-wrapper {
+    margin-bottom: var(--md-para-gap) !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  .markdown-body .code-block-wrapper pre {
+    padding-right: 16px !important;
+    margin-bottom: 0 !important;
   }
 
   .markdown-body pre {
     background: #f6f8fa !important;
     border: 1px solid #d0d7de !important;
+    border-radius: 8px !important;
+    padding: 16px !important;
+    margin-bottom: var(--md-para-gap) !important;
   }
 
   .markdown-body code {
-    background: rgba(0,0,0,0.05) !important;
+    font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace !important;
+    background: #eff2f5 !important;
+    color: #1f2328 !important;
+    border: 1px solid #d8dee4 !important;
+    padding: 0.2em 0.4em !important;
+    border-radius: 4px !important;
+    font-size: 0.9em !important;
+  }
+
+  .markdown-body pre code {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
     color: #24292f !important;
   }
 
+  /* High-Contrast Print Syntax Highlighting (GitHub Light theme) */
+  .hljs {
+    color: #24292f !important;
+    background: transparent !important;
+  }
+
+  .hljs-keyword,
+  .hljs-selector-tag,
+  .hljs-subst {
+    color: #cf222e !important; /* Bold crimson */
+    font-weight: 600 !important;
+  }
+
+  .hljs-string,
+  .hljs-title.class_,
+  .hljs-section,
+  .hljs-attribute,
+  .hljs-literal,
+  .hljs-template-tag,
+  .hljs-template-variable,
+  .hljs-type,
+  .hljs-addition {
+    color: #0a3069 !important; /* Deep navy blue */
+  }
+
+  .hljs-title.function_,
+  .hljs-function .hljs-title,
+  .hljs-title {
+    color: #8250df !important; /* Vivid purple */
+    font-weight: 600 !important;
+  }
+
+  .hljs-comment,
+  .hljs-quote,
+  .hljs-deletion,
+  .hljs-meta {
+    color: #57606a !important; /* Readable dark gray */
+    font-style: italic !important;
+  }
+
+  .hljs-number,
+  .hljs-symbol,
+  .hljs-bullet {
+    color: #0550ae !important; /* Clean blue */
+    font-weight: 500 !important;
+  }
+
+  .hljs-variable,
+  .hljs-params,
+  .hljs-attr {
+    color: #953800 !important; /* Rich amber/rust */
+  }
+
+  .hljs-built_in,
+  .hljs-doctag {
+    color: #116329 !important; /* Forest green */
+    font-weight: 600 !important;
+  }
+
+  .hljs-emphasis {
+    font-style: italic !important;
+  }
+
+  .hljs-strong {
+    font-weight: bold !important;
+  }
+
+  .markdown-body blockquote {
+    border-left: 4px solid #3b82f6 !important;
+    background: #f8fafc !important;
+    color: #334155 !important;
+    padding: 10px 16px !important;
+    border-radius: 0 6px 6px 0 !important;
+  }
+
   .markdown-body hr {
-    background-color: #d0d7de !important;
+    background-color: #e2e8f0 !important;
     height: 1px !important;
     margin: calc(var(--md-para-gap) * 1.5) 0 !important;
   }
@@ -565,12 +762,15 @@ body {
   }
 
   .markdown-body th, .markdown-body td {
-    border: 1px solid #d0d7de !important;
-    padding: 6px 10px !important;
+    border: 1px solid #cbd5e1 !important;
+    padding: 8px 12px !important;
+    color: #1e293b !important;
   }
 
   .markdown-body th {
-    background-color: #f6f8fa !important;
+    background-color: #f1f5f9 !important;
+    font-weight: 600 !important;
+    color: #0f172a !important;
   }
 
   .markdown-body.hide-table-borders th, 
@@ -582,8 +782,16 @@ body {
     background-color: transparent !important;
   }
 
+  .markdown-body li:has(> input[type="checkbox"]),
+  .markdown-body li:has(> p > input[type="checkbox"]),
+  .markdown-body .task-list-item {
+    list-style-type: none !important;
+    margin-left: -1em !important;
+  }
+
   /* Avoid breaking inside important elements */
   .markdown-body pre,
+  .markdown-body .code-block-wrapper,
   .markdown-body blockquote,
   .markdown-body .markdown-alert,
   .markdown-body table,
@@ -599,21 +807,55 @@ body {
     padding: 0 !important;
   }
   
-  /* Make sure alert colors persist in print */
-  .markdown-body .markdown-alert-note { border-left-color: #2f81f7 !important; }
-  .markdown-body .markdown-alert-note .markdown-alert-title { color: #2f81f7 !important; }
+  /* Make alert callouts readable and visually distinct in PDF */
+  .markdown-body .markdown-alert {
+    padding: 10px 16px !important;
+    border-radius: 0 6px 6px 0 !important;
+    margin-bottom: var(--md-para-gap) !important;
+  }
+  .markdown-body .markdown-alert p {
+    color: #1e293b !important;
+  }
   
-  .markdown-body .markdown-alert-tip { border-left-color: #3fb950 !important; }
-  .markdown-body .markdown-alert-tip .markdown-alert-title { color: #3fb950 !important; }
+  .markdown-body .markdown-alert-note {
+    border-left-color: #0969da !important;
+    background-color: #f0f7ff !important;
+  }
+  .markdown-body .markdown-alert-note .markdown-alert-title {
+    color: #0969da !important;
+  }
   
-  .markdown-body .markdown-alert-important { border-left-color: #ab7df8 !important; }
-  .markdown-body .markdown-alert-important .markdown-alert-title { color: #ab7df8 !important; }
+  .markdown-body .markdown-alert-tip {
+    border-left-color: #1a7f37 !important;
+    background-color: #f0fdf4 !important;
+  }
+  .markdown-body .markdown-alert-tip .markdown-alert-title {
+    color: #1a7f37 !important;
+  }
   
-  .markdown-body .markdown-alert-warning { border-left-color: #d29922 !important; }
-  .markdown-body .markdown-alert-warning .markdown-alert-title { color: #d29922 !important; }
+  .markdown-body .markdown-alert-important {
+    border-left-color: #8250df !important;
+    background-color: #faf5ff !important;
+  }
+  .markdown-body .markdown-alert-important .markdown-alert-title {
+    color: #8250df !important;
+  }
   
-  .markdown-body .markdown-alert-caution { border-left-color: #f85149 !important; }
-  .markdown-body .markdown-alert-caution .markdown-alert-title { color: #f85149 !important; }
+  .markdown-body .markdown-alert-warning {
+    border-left-color: #9a6700 !important;
+    background-color: #fffbeb !important;
+  }
+  .markdown-body .markdown-alert-warning .markdown-alert-title {
+    color: #9a6700 !important;
+  }
+  
+  .markdown-body .markdown-alert-caution {
+    border-left-color: #cf222e !important;
+    background-color: #fef2f2 !important;
+  }
+  .markdown-body .markdown-alert-caution .markdown-alert-title {
+    color: #cf222e !important;
+  }
   
   /* Avoid orphan headings */
   .markdown-body h1,
@@ -624,8 +866,8 @@ body {
     break-after: avoid;
   }
 
-  /* Make sure math renders as black in PDF */
+  /* Make sure math renders with deep contrast in PDF */
   .katex {
-    color: black !important;
+    color: #0f172a !important;
   }
 }

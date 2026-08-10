@@ -9,6 +9,7 @@ Welcome to **MarkSync PDF**, a modern desktop studio designed to convert Markdow
 * **Real-Time Split-Pane Workspace:** Distraction-free editing on the left with instant, synchronized rendering on the right.
 * **Dynamic Typography Controls:** Real-time toolbar sliders for **Font Size**, **Title Size**, **Line Spacing**, and **Paragraph Gaps** with immediate preview feedback and PDF carry-over.
 * **Table Border Customization:** Easily toggle between bordered and clean borderless table layouts.
+* **One-Click Syntax Copy:** Instant copy buttons on every code block and syntax template for rapid learning and pasting.
 * **Drag-and-Drop File Import:** Drop any `.md` or `.txt` file onto the window to open its contents instantly.
 * **Advanced Markdown Formatting:**
   * **Code Blocks:** Multi-language syntax highlighting powered by *highlight.js*.
@@ -29,7 +30,7 @@ Welcome to **MarkSync PDF**, a modern desktop studio designed to convert Markdow
 3. **Auto-Save:** Your current document is automatically preserved locally across application sessions.
 
 ### Adjusting Layout with Dynamic Sliders
-Use the **Format Preview & PDF** toolbar at the top of the window to fine-tune your document layout:
+Use the **Format Preview** toolbar at the top of the window to fine-tune your document layout:
 * **Font Size Slider (`12px` – `28px`):** Scales the base body text size.
 * **Title Size Slider (`1.2em` – `3.5em`):** Adjusts heading scale proportionally from `H1` down to `H4`.
 * **Line Spacing Slider (`1.2` – `3.0`):** Fine-tunes line height for compact or airy reading.
@@ -94,6 +95,9 @@ sequenceDiagram
 ---
 
 ## 4. Markdown Syntax & Features Cheat Sheet
+
+> [!TIP]
+> **Quick Learning Shortcut:** Click the **Copy** icon button in the top-right corner of any syntax box below to instantly copy the raw Markdown example directly to your clipboard!
 
 ### GitHub-Style Alerts & Callouts
 
@@ -163,7 +167,9 @@ $$
 
 ### Mermaid Diagrams
 
-Generate visual diagrams by labeling code blocks with `mermaid`:
+Generate visual diagrams by labeling code blocks with `mermaid`. MarkSync PDF supports flowcharts, sequence diagrams, state diagrams, class diagrams, and more.
+
+#### 1. Linear Process Flowchart (Left-to-Right)
 
 ```mermaid
 flowchart LR
@@ -175,12 +181,69 @@ flowchart LR
     style PDF fill:#064e3b,stroke:#10b981,color:#fff
 ```
 
-#### Diagram Syntax:
+##### Syntax:
+````markdown
+```mermaid
+flowchart LR
+    Draft["Drafting .md"] --> Review["Live Preview"]
+    Review --> Adjust["Adjust Sliders"]
+    Adjust --> PDF["Export PDF"]
+    
+    style Draft fill:#1e293b,stroke:#3b82f6,color:#fff
+    style PDF fill:#064e3b,stroke:#10b981,color:#fff
+```
+````
+
+#### 2. Advanced Multi-Branch Flowchart (Top-to-Down)
+
+```mermaid
+flowchart TD
+    A["Raw Markdown Input"] --> B["MarkSync Real-Time Parser"]
+    B --> C{"Content Type"}
+    
+    C -->|Code Blocks| D["highlight.js Engine"]
+    C -->|LaTeX Math| E["KaTeX Typesetting"]
+    C -->|Diagrams| F["Mermaid.js Renderer"]
+    C -->|Callouts| G["GitHub Alert Processor"]
+    
+    D --> H["Dynamic Typography Engine"]
+    E --> H
+    F --> H
+    G --> H
+    
+    H --> I["Live Split Preview"]
+    I --> J["Chromium Print-to-PDF Pipeline"]
+    J --> K["Print-Ready PDF Document"]
+
+    style A fill:#1e293b,stroke:#3b82f6,stroke-width:2px,color:#fff
+    style H fill:#1e1b4b,stroke:#6366f1,stroke-width:2px,color:#fff
+    style K fill:#064e3b,stroke:#10b981,stroke-width:2px,color:#fff
+```
+
+##### Syntax:
 ````markdown
 ```mermaid
 flowchart TD
-    Start["Start"] --> Process["Process Data"]
-    Process --> Done["Finish"]
+    A["Raw Markdown Input"] --> B["MarkSync Real-Time Parser"]
+    B --> C{"Content Type"}
+    
+    C -->|Code Blocks| D["highlight.js Engine"]
+    C -->|LaTeX Math| E["KaTeX Typesetting"]
+    C -->|Diagrams| F["Mermaid.js Renderer"]
+    C -->|Callouts| G["GitHub Alert Processor"]
+    
+    D --> H["Dynamic Typography Engine"]
+    E --> H
+    F --> H
+    G --> H
+    
+    H --> I["Live Split Preview"]
+    I --> J["Chromium Print-to-PDF Pipeline"]
+    J --> K["Print-Ready PDF Document"]
+
+    style A fill:#1e293b,stroke:#3b82f6,stroke-width:2px,color:#fff
+    style H fill:#1e1b4b,stroke:#6366f1,stroke-width:2px,color:#fff
+    style K fill:#064e3b,stroke:#10b981,stroke-width:2px,color:#fff
 ```
 ````
 
@@ -188,7 +251,9 @@ flowchart TD
 
 ### Code Blocks & Syntax Highlighting
 
-Powered by *highlight.js* with support for major programming languages:
+Write inline code with single backticks, or create multi-line code blocks with triple backticks and a language identifier (such as `javascript`, `python`, `html`, `css`, `bash`, `json`, `sql`, etc.) for syntax highlighting powered by *highlight.js*:
+
+#### Live Code Examples:
 
 ```javascript
 // Synchronizing typography variables with DOM
@@ -208,24 +273,64 @@ def find_markdown_files(directory: str) -> list[str]:
     return [str(p) for p in pathlib.Path(directory).glob("*.md")]
 ```
 
+#### Code Block Syntax:
+````markdown
+Inline code: `const appVersion = "1.2.5";`
+
+Multi-line block with language identifier:
+```javascript
+function greet(name) {
+  console.log(`Hello, ${name}!`);
+}
+```
+
+```python
+def calculate_total(items: list[float]) -> float:
+    return sum(items)
+```
+````
+
 ---
 
-### Tables & Task Lists
+### Tables & Column Alignment
 
-| Feature | Supported | Engine / Technology |
-| :--- | :---: | :--- |
-| **Live Split Preview** | ✅ Yes | Electron + DOM Parser |
-| **Dynamic Spacing Sliders** | ✅ Yes | Dynamic CSS Variables |
-| **LaTeX Math** | ✅ Yes | KaTeX Library |
-| **Mermaid Diagrams** | ✅ Yes | Mermaid.js Engine |
-| **GitHub Callout Alerts** | ✅ Yes | Custom Marked Renderer |
-| **Borderless Tables** | ✅ Yes | CSS Table Border Switch |
+Format structured data using pipes (`|`) and hyphens (`-`). Use colons (`:`) in the separator row to control text alignment (`:---` for left, `:---:` for center, and `---:` for right). Toggle **Hide Table Borders** in the toolbar for minimalist tables.
 
-#### Task Checklist:
-- [x] Write rich Markdown documentation
-- [x] Embed mathematical formulas and vector diagrams
-- [x] Adjust typography sliders for clean layout
-- [ ] Export final document to PDF
+#### Live Table Result:
+
+| Header 1 (Left) | Header 2 (Center) | Header 3 (Right) |
+| :--- | :---: | ---: |
+| Left-aligned text | Centered value | $100.00 |
+| Sample item A | Active | $250.50 |
+| Sample item B | Completed | $75.00 |
+
+#### Table Syntax:
+```markdown
+| Header 1 (Left) | Header 2 (Center) | Header 3 (Right) |
+| :--- | :---: | ---: |
+| Left-aligned text | Centered value | $100.00 |
+| Sample item A | Active | $250.50 |
+| Sample item B | Completed | $75.00 |
+```
+
+---
+
+### Task Checklists
+
+Create interactive task checklists using `- [x]` for checked items and `- [ ]` for unchecked items:
+
+#### Live Checklist Result:
+
+- [x] Completed task item
+- [ ] Unfinished task item
+- [ ] Next milestone item
+
+#### Checklist Syntax:
+```markdown
+- [x] Completed task item
+- [ ] Unfinished task item
+- [ ] Next milestone item
+```
 
 ---
 
