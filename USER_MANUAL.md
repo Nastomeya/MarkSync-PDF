@@ -1,114 +1,237 @@
-# MarkSync PDF — User Manual 🚀
+# MarkSync PDF — User Manual & Reference Guide 🚀
 
-Welcome to **MarkSync PDF**, a premium Windows desktop application designed to convert Markdown documents into professional, print-ready PDF files. This manual provides an overview of the application's features, a guide on how to use it, and a syntax cheat sheet for advanced features.
+Welcome to **MarkSync PDF**, a modern desktop studio designed to convert Markdown documents into publication-ready, professional PDF files. MarkSync PDF combines a live split-view editor with dynamic typography sliders, KaTeX mathematical typesetting, Mermaid diagram generation, GitHub-style callouts, and pixel-perfect Chromium PDF export.
 
 ---
 
-## 1. Key Features
+## 1. Key Features & Capabilities
 
-* **Sleek Side-by-Side Interface:** A modern, distraction-free split screen showing your raw Markdown code on the left and a live, beautifully rendered preview on the right.
-* **Dynamic Typography Controls:** Instantly adjust **Font Size**, **Line Spacing**, and **Paragraph Gaps** using sliders in the toolbar. Changes apply immediately to the preview and carry over to your exported PDF.
-* **Drag-and-Drop File Import:** Drag any `.md` or `.txt` file from your computer and drop it anywhere on the app window to import its contents instantly.
-* **Advanced Markdown Support:**
-  * **Code Blocks:** Syntax highlighting for major programming languages (via *highlight.js*).
-  * **Math Equations:** Full support for LaTeX block equations (`$$...$$`) and inline math (`$...$`) (via *KaTeX*).
-  * **Mermaid Diagrams:** Write diagram scripts (flowcharts, sequence diagrams, state diagrams) directly in code blocks and see them render as graphics.
-  * **Tables:** Beautifully aligned columns and headers.
-  * **Task Checklists:** Interactive checkboxes (`[x]` and `[ ]`).
-* **Clean PDF Exporting:** Hides the editor interface, sliders, and buttons during conversion so only your structured document appears in the final PDF.
-* **Smart Page Breaks:** Automatically prevents headings, code blocks, tables, and diagrams from breaking awkwardly across page seams.
+* **Real-Time Split-Pane Workspace:** Distraction-free editing on the left with instant, synchronized rendering on the right.
+* **Dynamic Typography Controls:** Real-time toolbar sliders for **Font Size**, **Title Size**, **Line Spacing**, and **Paragraph Gaps** with immediate preview feedback and PDF carry-over.
+* **Table Border Customization:** Easily toggle between bordered and clean borderless table layouts.
+* **Drag-and-Drop File Import:** Drop any `.md` or `.txt` file onto the window to open its contents instantly.
+* **Advanced Markdown Formatting:**
+  * **Code Blocks:** Multi-language syntax highlighting powered by *highlight.js*.
+  * **LaTeX Mathematics:** High-speed inline (`$...$`) and block (`$$...$$`) math equations powered by *KaTeX*.
+  * **Mermaid Diagrams:** Vector-rendered flowcharts, sequence diagrams, state charts, and class diagrams.
+  * **GitHub-Style Alerts:** Distinct callout boxes (`[!NOTE]`, `[!TIP]`, `[!IMPORTANT]`, `[!WARNING]`, `[!CAUTION]`).
+  * **Task Checklists:** Interactive task checkboxes (`[x]` and `[ ]`).
+* **Standalone Print-Ready PDF:** Hides editor controls, generates crisp vector graphics, and preserves styling in standalone PDF output.
+* **Smart Page Breaks:** Automatically prevents headers, code blocks, tables, and diagrams from breaking awkwardly across page seams.
 
 ---
 
 ## 2. Getting Started & How to Use
 
 ### Writing and Importing Content
-1. **Type directly** in the left editor panel. The preview on the right updates instantly.
-2. **Drag & Drop:** Find any `.md` or `.txt` file on your PC, drag it over the application window, and drop it. The editor will load its content.
+1. **Type directly** into the left editor pane. The preview pane on the right updates instantaneously.
+2. **Drag & Drop:** Drag any `.md` or `.txt` file from Windows Explorer and drop it anywhere over the application window to load it.
+3. **Auto-Save:** Your current document is automatically preserved locally across application sessions.
 
-### Adjusting the Layout
-Use the **Format Preview & PDF** toolbar at the top to customize the layout:
-* **Font Size Slider:** Adjust text sizing between `12px` and `28px`.
-* **Line Spacing Slider:** Fine-tune spacing between lines from tight (`1.2`) to wide (`3.0`).
-* **Paragraph Gap Slider:** Increase or decrease spacing between paragraphs, lists, tables, and code blocks from `4px` to `40px`.
+### Adjusting Layout with Dynamic Sliders
+Use the **Format Preview & PDF** toolbar at the top of the window to fine-tune your document layout:
+* **Font Size Slider (`12px` – `28px`):** Scales the base body text size.
+* **Title Size Slider (`1.2em` – `3.5em`):** Adjusts heading scale proportionally from `H1` down to `H4`.
+* **Line Spacing Slider (`1.2` – `3.0`):** Fine-tunes line height for compact or airy reading.
+* **Paragraph Gap Slider (`4px` – `40px`):** Modulates vertical breathing room between paragraphs, tables, quotes, and code blocks.
+* **Hide Table Borders:** Check this box for minimalist, borderless tables.
 
-### Exporting to PDF
+### Previewing and Exporting to PDF
 1. Click the **Preview & Export** button in the top-right corner.
-2. The application will render a print-ready PDF and display it in a native overlay window so you can review it before saving.
-3. If it looks correct, click **Save to PC**, choose a filename and location, and click **Save**.
-4. Click **Close Preview** to return to the editor.
+2. A high-resolution PDF will be rendered and shown in the native preview overlay modal.
+3. If everything looks balanced, click **Save to PC** to choose your save location.
+4. Click **Close Preview** to return to editing.
 
 ---
 
-## 3. Markdown Syntax Cheat Sheet
+## 3. Application Workflow & Architecture
 
-Here are examples of standard and advanced Markdown syntax you can use in **MarkSync PDF**:
+The diagram below illustrates how MarkSync PDF transforms your Markdown content into a clean PDF:
 
-### Standard Formatting
-```markdown
-# Header 1
-## Header 2
-### Header 3
+```mermaid
+flowchart TD
+    A["Raw Markdown Input"] --> B["MarkSync Real-Time Parser"]
+    B --> C{"Content Type"}
+    
+    C -->|Code Blocks| D["highlight.js Engine"]
+    C -->|LaTeX Math| E["KaTeX Typesetting"]
+    C -->|Diagrams| F["Mermaid.js Renderer"]
+    C -->|Callouts| G["GitHub Alert Processor"]
+    
+    D --> H["Dynamic Typography Engine"]
+    E --> H
+    F --> H
+    G --> H
+    
+    H --> I["Live Split Preview"]
+    I --> J["Chromium Print-to-PDF Pipeline"]
+    J --> K["Print-Ready PDF Document"]
 
-This is standard paragraph text. You can make it **bold**, *italicized*, or ~~struck-through~~.
-
-> This is a blockquote for callouts or quotes.
+    style A fill:#1e293b,stroke:#3b82f6,stroke-width:2px,color:#fff
+    style H fill:#1e1b4b,stroke:#6366f1,stroke-width:2px,color:#fff
+    style K fill:#064e3b,stroke:#10b981,stroke-width:2px,color:#fff
 ```
 
-### Lists and Checklists
-```markdown
-* Bullet item A
-* Bullet item B
-  * Indented item
+### Export Pipeline Sequence
 
-1. Numbered item 1
-2. Numbered item 2
+```mermaid
+sequenceDiagram
+    autonumber
+    actor User
+    participant UI as MarkSync UI
+    participant Main as Electron Main
+    participant Chrome as Chromium Print Engine
 
-- [x] Completed task item
-- [ ] Uncompleted task item
+    User->>UI: Click "Preview & Export"
+    UI->>Main: Request PDF generation with active styles
+    Main->>Chrome: Render headless print layout
+    Chrome-->>Main: Return temporary PDF buffer
+    Main-->>UI: Display PDF in interactive preview modal
+    User->>UI: Click "Save to PC"
+    UI->>Main: Save file to local storage
 ```
 
-### Tables
+---
+
+## 4. Markdown Syntax & Features Cheat Sheet
+
+### GitHub-Style Alerts & Callouts
+
+MarkSync PDF natively renders all five GitHub alert types with custom icons and styled borders:
+
+> [!NOTE]
+> Useful background information that users should know.
+
+> [!TIP]
+> Helpful advice or shortcuts to improve productivity.
+
+> [!IMPORTANT]
+> Crucial information required to achieve your goal.
+
+> [!WARNING]
+> Urgent info that needs immediate attention to prevent problems.
+
+> [!CAUTION]
+> Advises about potential risks, hazards, or negative outcomes.
+
+#### Alert Syntax:
 ```markdown
-| Feature | Supported | Technology |
-| :--- | :---: | :--- |
-| Live Preview | Yes | Electron |
-| Math Equations | Yes | KaTeX |
-| Diagrams | Yes | Mermaid |
+> [!NOTE]
+> Useful background information.
+
+> [!TIP]
+> Helpful advice or shortcuts.
+
+> [!IMPORTANT]
+> Key information you should know.
+
+> [!WARNING]
+> Warning about potential issues.
+
+> [!CAUTION]
+> Critical caution regarding risks.
 ```
 
-### LaTeX Math Equations
-Write inline math using single dollar signs, or block equations using double dollar signs:
+---
 
+### LaTeX Mathematical Equations (KaTeX)
+
+Write inline formulas with single dollar signs `$ ... $` or centered display equations with double dollar signs `$$ ... $$`.
+
+#### Live Formula Examples:
+* **Inline Math:** The Euler identity $e^{i\pi} + 1 = 0$ and limit $\lim_{x \to 0} \frac{\sin x}{x} = 1$.
+* **Gaussian Normal Distribution:**
+$$f(x \mid \mu, \sigma^2) = \frac{1}{\sigma \sqrt{2\pi}} \exp\left( -\frac{(x - \mu)^2}{2\sigma^2} \right)$$
+
+* **Definite Integral & Series:**
+$$\int_{a}^{b} x^2 \, dx = \left[ \frac{x^3}{3} \right]_{a}^{b}, \quad \sum_{n=1}^{\infty} \frac{1}{n^2} = \frac{\pi^2}{6}$$
+
+* **Coordinate Transformation Matrix:**
+$$\begin{pmatrix} x' \\ y' \\ 1 \end{pmatrix} = \begin{bmatrix} \cos\theta & -\sin\theta & t_x \\ \sin\theta & \cos\theta & t_y \\ 0 & 0 & 1 \end{bmatrix} \begin{pmatrix} x \\ y \\ 1 \end{pmatrix}$$
+
+#### Math Syntax:
 ```markdown
-Here is an inline equation: $E = mc^2$
+Inline formula: $E = mc^2$
 
-And a block math equation:
+Block equation:
 $$
-\int_{a}^{b} x^2 \, dx = \left[ \frac{x^3}{3} \right]_{a}^{b}
+f(x) = \int_{-\infty}^{\infty} \hat{f}(\xi)\,e^{2 \pi i \xi x}\,d\xi
 $$
 ```
+
+---
 
 ### Mermaid Diagrams
-Render diagrams by wrapping your scripts in a code block labeled `mermaid`:
 
-```markdown
-\`\`\`mermaid
-graph TD
-    Start["Start Application"] --> Import["Import Markdown File"]
-    Import --> Sliders["Adjust Spacing Sliders"]
-    Sliders --> Export["Preview & Export PDF"]
-    Export --> Save["Save PDF to PC"]
+Generate visual diagrams by labeling code blocks with `mermaid`:
+
+```mermaid
+flowchart LR
+    Draft["Drafting .md"] --> Review["Live Preview"]
+    Review --> Adjust["Adjust Sliders"]
+    Adjust --> PDF["Export PDF"]
     
-    style Start fill:#3b82f6,stroke:#1d4ed8,color:#fff
-    style Save fill:#10b981,stroke:#047857,color:#fff
-\`\`\`
+    style Draft fill:#1e293b,stroke:#3b82f6,color:#fff
+    style PDF fill:#064e3b,stroke:#10b981,color:#fff
+```
+
+#### Diagram Syntax:
+````markdown
+```mermaid
+flowchart TD
+    Start["Start"] --> Process["Process Data"]
+    Process --> Done["Finish"]
+```
+````
+
+---
+
+### Code Blocks & Syntax Highlighting
+
+Powered by *highlight.js* with support for major programming languages:
+
+```javascript
+// Synchronizing typography variables with DOM
+function setDocumentTheme(fontSize, lineHeight) {
+  const container = document.getElementById('previewOutput');
+  container.style.setProperty('--md-font-size', `${fontSize}px`);
+  container.style.setProperty('--md-line-height', lineHeight);
+}
+```
+
+```python
+# Batch export script
+import pathlib
+
+def find_markdown_files(directory: str) -> list[str]:
+    """Return all Markdown files in a directory."""
+    return [str(p) for p in pathlib.Path(directory).glob("*.md")]
 ```
 
 ---
 
-## 4. Troubleshooting & Best Practices
+### Tables & Task Lists
 
-* **Mermaid Syntax Errors:** If a diagram isn't rendering, check that your Mermaid syntax is correct. The preview pane will display a detailed syntax error report if there is a parsing issue.
-* **Page Layout Tweaks:** If a heading or table is positioned awkwardly near page breaks, adjust the **Paragraph Gap** slider in the toolbar. A slight adjustment often moves elements onto the next page perfectly.
-* **Large Files:** For extremely long documents (100+ pages), PDF generation may take a few seconds. A loading text will show on the button to indicate progress.
+| Feature | Supported | Engine / Technology |
+| :--- | :---: | :--- |
+| **Live Split Preview** | ✅ Yes | Electron + DOM Parser |
+| **Dynamic Spacing Sliders** | ✅ Yes | Dynamic CSS Variables |
+| **LaTeX Math** | ✅ Yes | KaTeX Library |
+| **Mermaid Diagrams** | ✅ Yes | Mermaid.js Engine |
+| **GitHub Callout Alerts** | ✅ Yes | Custom Marked Renderer |
+| **Borderless Tables** | ✅ Yes | CSS Table Border Switch |
+
+#### Task Checklist:
+- [x] Write rich Markdown documentation
+- [x] Embed mathematical formulas and vector diagrams
+- [x] Adjust typography sliders for clean layout
+- [ ] Export final document to PDF
+
+---
+
+## 5. Pro Tips & Best Practices for PDF Export
+
+1. **Avoid Orphaned Headings:** If a heading appears near the very bottom of a page, increase the **Paragraph Gap** slider slightly. This will smoothly push the heading to the top of the next page.
+2. **Table Density:** For wide tables, decrease the **Font Size** slider to `14px` or `15px` to keep all columns comfortably within the printable margins.
+3. **Diagram Sizing:** Keep Mermaid diagrams focused and use `flowchart TD` or `flowchart LR` orientation for optimal fit on standard portrait A4 / Letter pages.
+4. **Valid Math & Mermaid Syntax:** If a diagram or formula shows an error message, check for missing closing brackets or unescaped characters.

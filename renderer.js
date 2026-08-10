@@ -164,11 +164,11 @@ async function init() {
   async function updatePreview() {
     output.innerHTML = marked.parse(input.value);
     
-    if (document.querySelector('.mermaid')) {
+    if (output.querySelector('.mermaid')) {
       try {
         await ensureMermaidLoaded();
         await mermaid.run({
-          querySelector: '.mermaid'
+          querySelector: '#previewOutput .mermaid'
         });
       } catch (err) {
         console.error('Mermaid render error:', err);
@@ -232,6 +232,7 @@ async function init() {
 
   // Help Modal Actions
   helpBtn.addEventListener('click', async () => {
+    helpModal.classList.remove('hidden');
     try {
       const manualPath = path.join(__dirname, 'USER_MANUAL.md');
       if (fs.existsSync(manualPath)) {
@@ -256,7 +257,6 @@ async function init() {
       console.error('Failed to read user manual:', e);
       helpContent.innerHTML = '<p>Failed to load User Manual.</p>';
     }
-    helpModal.classList.remove('hidden');
   });
 
   closeHelpBtn.addEventListener('click', () => {
