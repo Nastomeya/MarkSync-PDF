@@ -11,9 +11,12 @@ async function init() {
   const blockMathExtension = {
     name: 'blockMath',
     level: 'block',
-    start(src) { return src.match(/\$\$/)?.index; },
+    start(src) {
+      const match = src.match(/(?:^|\n)\s*\$\$/);
+      return match ? match.index : undefined;
+    },
     tokenizer(src, tokens) {
-      const rule = /^\$\$([\s\S]+?)\$\$/;
+      const rule = /^(?:\r?\n)?\s*\$\$([\s\S]+?)\$\$\s*(?:\r?\n|$)/;
       const match = rule.exec(src);
       if (match) {
         return {
@@ -39,9 +42,12 @@ async function init() {
   const inlineMathExtension = {
     name: 'inlineMath',
     level: 'inline',
-    start(src) { return src.match(/\$/)?.index; },
+    start(src) {
+      const match = src.match(/\$(?!\$)/);
+      return match ? match.index : undefined;
+    },
     tokenizer(src, tokens) {
-      const rule = /^\$([^$]+?)\$/;
+      const rule = /^\$((?!\$)[^\$\n]+?)\$/;
       const match = rule.exec(src);
       if (match) {
         return {
