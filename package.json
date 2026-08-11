@@ -1,6 +1,6 @@
 {
   "name": "marksync-pdf",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "description": "A modern Markdown to PDF converter app.",
   "main": "main.js",
   "scripts": {
@@ -28,25 +28,34 @@
     "appId": "com.marksyncpdf.app",
     "productName": "MarkSync PDF",
     "compression": "maximum",
+    "electronLanguages": [
+      "en-US"
+    ],
     "directories": {
       "buildResources": "build"
     },
     "icon": "build/icon.ico",
     "files": [
       "**/*",
-      "!dist",
-      "!Markdown to PDF App_Portable",
-      "!Installers",
+      "!dist/**",
+      "!Resources/**",
+      "!Markdown to PDF App_Portable/**",
+      "!Installers/**",
       "!**/*.map",
+      "!**/*.mjs.map",
       "!**/*.ts",
+      "!**/*.d.ts",
       "!node_modules/**/*.md",
-      "!node_modules/mermaid/src",
+      "!node_modules/**/*.markdown",
+      "!node_modules/**/README*",
+      "!node_modules/**/CHANGELOG*",
+      "!node_modules/mermaid/src/**",
       "!node_modules/mermaid/dist/mermaid.js"
     ],
     "win": {
       "target": "nsis",
       "artifactName": "Install.exe",
-	  "icon": "build/icon.ico"
+      "icon": "build/icon.ico"
     }
   }
 }
