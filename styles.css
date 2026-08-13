@@ -586,6 +586,58 @@ body {
   background: #525659; /* Standard Chrome PDF viewer background */
 }
 
+/* Toast Notifications */
+.toast-notification {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%) translateY(0);
+  background: rgba(17, 24, 39, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--text-main);
+  padding: 12px 24px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 2px 6px rgba(0, 0, 0, 0.3);
+  font-size: 0.9rem;
+  font-weight: 500;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 480px;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.toast-notification.hidden {
+  opacity: 0;
+  transform: translateX(-50%) translateY(16px);
+  pointer-events: none;
+}
+
+.toast-notification.toast-error {
+  border-left: 4px solid #ef4444;
+  color: #fca5a5;
+}
+
+.toast-notification.toast-warning {
+  border-left: 4px solid #f59e0b;
+  color: #fde68a;
+}
+
+.toast-notification.toast-success {
+  border-left: 4px solid #10b981;
+  color: #a7f3d0;
+}
+
+.toast-notification.toast-info {
+  border-left: 4px solid var(--accent);
+  color: #bfdbfe;
+}
+
 /* Print Styles for PDF Export */
 @media print {
   @page {

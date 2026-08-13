@@ -67,10 +67,26 @@ app.whenReady().then(() => {
   });
 });
 
+let activeTempPdfPath = null;
+
+function cleanupTempPdf() {
+  if (activeTempPdfPath && fs.existsSync(activeTempPdfPath)) {
+    try {
+      fs.unlinkSync(activeTempPdfPath);
+    } catch (_) {}
+    activeTempPdfPath = null;
+  }
+}
+
 app.on('window-all-closed', () => {
+  cleanupTempPdf();
   if (process.platform !== 'darwin') {
     app.quit();
   }
+});
+
+app.on('will-quit', () => {
+  cleanupTempPdf();
 });
 
 // Handle PDF Preview Generation
@@ -78,6 +94,9 @@ ipcMain.handle('preview-pdf', async (event) => {
   const win = BrowserWindow.fromWebContents(event.sender);
   
   try {
+    // Clean up previous temporary PDF before creating a new one
+    cleanupTempPdf();
+
     const pdfData = await win.webContents.printToPDF({
       printBackground: true,
       pageSize: 'A4',
@@ -86,8 +105,9 @@ ipcMain.handle('preview-pdf', async (event) => {
       }
     });
 
-    const tempPath = path.join(os.tmpdir(), `markdown-preview-${Date.now()}.pdf`);
+    const tempPath = path.join(os.tmpdir(), `marksync-preview-${Date.now()}.pdf`);
     fs.writeFileSync(tempPath, pdfData);
+    activeTempPdfPath = tempPath;
 
     return { success: true, tempPath };
   } catch (error) {

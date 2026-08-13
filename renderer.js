@@ -161,7 +161,21 @@ async function init() {
   const closePdfBtn = document.getElementById('closePdfBtn');
   const closeHelpBtn = document.getElementById('closeHelpBtn');
   const helpContent = document.getElementById('helpContent');
+  const toastNotification = document.getElementById('toastNotification');
   let currentTempPath = null;
+  let toastTimeout = null;
+
+  function showToast(message, type = 'info', duration = 3500) {
+    if (!toastNotification) return;
+    if (toastTimeout) {
+      clearTimeout(toastTimeout);
+    }
+    toastNotification.className = `toast-notification toast-${type}`;
+    toastNotification.textContent = message;
+    toastTimeout = setTimeout(() => {
+      toastNotification.classList.add('hidden');
+    }, duration);
+  }
 
   const appVersionElement = document.getElementById('appVersion');
   if (appVersionElement) {
@@ -218,7 +232,7 @@ async function init() {
       pdfWebview.src = `file://${result.tempPath}`;
       pdfModal.classList.remove('hidden');
     } else {
-      alert('Failed to preview PDF: ' + result.message);
+      showToast('Failed to preview PDF: ' + result.message, 'error');
     }
   });
 
@@ -238,8 +252,9 @@ async function init() {
       // Successfully saved
       pdfModal.classList.add('hidden');
       pdfWebview.src = 'about:blank';
+      showToast('PDF saved successfully!', 'success');
     } else if (result.message !== 'Cancelled') {
-      alert('Failed to save PDF: ' + result.message);
+      showToast('Failed to save PDF: ' + result.message, 'error');
     }
   });
 
@@ -340,8 +355,9 @@ async function init() {
         input.value = content;
         localStorage.setItem('savedMarkdown', content);
         updatePreview();
+        showToast('Document loaded: ' + file.name, 'info');
       } else {
-        alert('Please drop a .md or .txt file.');
+        showToast('Please drop a valid .md or .txt file.', 'warning');
       }
     }
   });
