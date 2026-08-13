@@ -353,9 +353,14 @@ async function init() {
     }
   });
 
-  // Help Modal Actions
+  // Help Modal Actions (with one-time render caching)
+  let isManualLoaded = false;
+
   helpBtn.addEventListener('click', async () => {
     helpModal.classList.remove('hidden');
+
+    if (isManualLoaded) return; // Keep cached DOM for instantaneous subsequent opens
+
     try {
       const manualPath = path.join(__dirname, 'USER_MANUAL.md');
       if (fs.existsSync(manualPath)) {
@@ -373,6 +378,7 @@ async function init() {
             console.error('Mermaid render error inside help modal:', me);
           }
         }
+        isManualLoaded = true;
       } else {
         helpContent.innerHTML = '<p>User Manual file not found.</p>';
       }
@@ -384,7 +390,6 @@ async function init() {
 
   closeHelpBtn.addEventListener('click', () => {
     helpModal.classList.add('hidden');
-    helpContent.innerHTML = ''; // Clear memory/DOM
   });
 
   // Delegated handler for code snippet copy buttons

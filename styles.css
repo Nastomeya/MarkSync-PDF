@@ -312,10 +312,8 @@ body {
   align-items: center;
   gap: 6px;
   padding: 5px 8px;
-  background: rgba(31, 41, 55, 0.75);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(31, 41, 55, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 6px;
   color: var(--text-muted);
   font-family: inherit;
@@ -539,6 +537,8 @@ body {
   overflow: hidden;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
   border: 1px solid var(--border-color);
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 .modal-header {
@@ -579,6 +579,16 @@ body {
 .modal-body {
   flex: 1;
   background: #525659; /* Standard Chrome PDF viewer background */
+  transform: translateZ(0);
+  contain: content;
+  will-change: scroll-position;
+  -webkit-overflow-scrolling: touch;
+}
+
+#helpModal .modal-body {
+  overflow-y: auto;
+  background: var(--bg-preview);
+  padding: 32px 48px;
 }
 
 /* Toast Notifications */
