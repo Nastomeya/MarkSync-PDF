@@ -7,7 +7,7 @@ const os = require('os');
 app.setAppUserModelId('com.marksyncpdf.app');
 
 // Prevent GPU cache, shader disk cache, and cache lock errors on Windows
-app.disableHardwareAcceleration();
+// app.disableHardwareAcceleration(); // Disabled: causes severe scrolling lag in PDF preview
 app.commandLine.appendSwitch('disable-gpu-shader-disk-cache');
 app.commandLine.appendSwitch('disable-gpu-cache');
 app.commandLine.appendSwitch('disable-http-cache');
