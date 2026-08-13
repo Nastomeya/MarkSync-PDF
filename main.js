@@ -3,70 +3,156 @@ const path = require('path');
 const fs = require('fs');
 const os = require('os');
 
-// Prevent GPU cache lock errors on Windows
+// Set Application User Model ID for Windows notification & taskbar grouping
+app.setAppUserModelId('com.marksyncpdf.app');
+
+// Prevent GPU cache, shader disk cache, and cache lock errors on Windows
 app.disableHardwareAcceleration();
+app.commandLine.appendSwitch('disable-gpu-shader-disk-cache');
+app.commandLine.appendSwitch('disable-gpu-cache');
+app.commandLine.appendSwitch('disable-http-cache');
 
-function createWindow() {
-  // 1. Create and show Splash Screen immediately
-  const splash = new BrowserWindow({
-    width: 500,
-    height: 350,
-    frame: false,
-    alwaysOnTop: true,
-    backgroundColor: '#0b0f19',
-    icon: path.join(__dirname, 'assets', 'icon.png'),
-    webPreferences: {
-      nodeIntegration: false,
-      contextIsolation: true
-    }
-  });
-  splash.loadFile('splash.html');
+// Helper to clean up any leftover corrupted/stale cache directories from older versions
+function cleanupStaleCache() {
+  try {
+    const userDataPath = app.getPath('userData');
+    if (!fs.existsSync(userDataPath)) return;
 
-  // 2. Create Main Window (hidden initially)
-  const win = new BrowserWindow({
-    width: 1200,
-    height: 800,
-    show: false, // <--- Crucial: Hide until loaded
-    backgroundColor: '#0b0f19',
-	icon: path.join(__dirname, 'assets', 'icon.png'), 
-    webPreferences: {
-      nodeIntegration: true,
-      nodeIntegrationInWorker: true,
-      contextIsolation: false,
-      plugins: true,
-      webviewTag: true
-    },
-    titleBarStyle: 'hidden',
-    titleBarOverlay: {
-      color: '#0b0f19',
-      symbolColor: '#f3f4f6'
-    }
-  });
-
-  win.loadFile('index.html');
-
-  // 3. When main window is fully rendered, swap them
-  win.once('ready-to-show', () => {
-    // Optional tiny delay to ensure all CSS/fonts are fully painted
-    setTimeout(() => {
-      if (!splash.isDestroyed()) {
-        splash.destroy();
+    const entries = fs.readdirSync(userDataPath);
+    for (const entry of entries) {
+      if (entry.startsWith('old_GPUCache_') || entry.startsWith('old_Cache_') || entry === 'GPUCache') {
+        const fullPath = path.join(userDataPath, entry);
+        try {
+          fs.rmSync(fullPath, { recursive: true, force: true });
+        } catch (_) {}
       }
-      win.show();
-      win.focus();
-    }, 500);
-  });
+    }
+  } catch (_) {}
 }
 
-app.whenReady().then(() => {
-  createWindow();
+// Enforce single instance lock to prevent multiple instances from conflicting
+// on Chromium's user-data cache and causing infinite splash loading.
+const gotTheLock = app.requestSingleInstanceLock();
 
-  app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) {
-      createWindow();
+if (!gotTheLock) {
+  // Another instance is already running; quit immediately to avoid lock contention
+  app.quit();
+} else {
+  let mainWindow = null;
+  let splashWindow = null;
+
+  app.on('second-instance', () => {
+    // If another instance was launched, focus the active window
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) mainWindow.restore();
+      if (!mainWindow.isVisible()) mainWindow.show();
+      mainWindow.focus();
     }
   });
-});
+
+  function createWindow() {
+    let splashClosed = false;
+
+    // 1. Create and show Splash Screen immediately
+    splashWindow = new BrowserWindow({
+      width: 500,
+      height: 350,
+      frame: false,
+      alwaysOnTop: true,
+      backgroundColor: '#0b0f19',
+      icon: path.join(__dirname, 'assets', 'icon.png'),
+      webPreferences: {
+        nodeIntegration: false,
+        contextIsolation: true
+      }
+    });
+    splashWindow.loadFile('splash.html');
+
+    // 2. Create Main Window (hidden initially)
+    mainWindow = new BrowserWindow({
+      width: 1200,
+      height: 800,
+      show: false, // Hide until loaded
+      backgroundColor: '#0b0f19',
+      icon: path.join(__dirname, 'assets', 'icon.png'), 
+      webPreferences: {
+        nodeIntegration: true,
+        nodeIntegrationInWorker: true,
+        contextIsolation: false,
+        plugins: true,
+        webviewTag: true
+      },
+      titleBarStyle: 'hidden',
+      titleBarOverlay: {
+        color: '#0b0f19',
+        symbolColor: '#f3f4f6'
+      }
+    });
+
+    mainWindow.loadFile('index.html');
+
+    function showMainWindow() {
+      if (splashClosed) return;
+      splashClosed = true;
+
+      // Close and clean up splash window safely
+      if (splashWindow && !splashWindow.isDestroyed()) {
+        splashWindow.destroy();
+        splashWindow = null;
+      }
+
+      // Show and focus main window
+      if (mainWindow && !mainWindow.isDestroyed()) {
+        mainWindow.show();
+        mainWindow.focus();
+      }
+    }
+
+    // 3. Primary trigger: When main window has rendered and is ready to show
+    mainWindow.once('ready-to-show', () => {
+      setTimeout(showMainWindow, 300);
+    });
+
+    // Fallback 1: When page finished loading (in case ready-to-show was delayed)
+    mainWindow.webContents.once('did-finish-load', () => {
+      setTimeout(showMainWindow, 800);
+    });
+
+    // Fallback 2: Failsafe timer (maximum 4 seconds) to ensure splash screen NEVER hangs
+    const failsafeTimer = setTimeout(() => {
+      if (!splashClosed) {
+        console.warn('Splash screen transition timed out; forcing main window to display.');
+        showMainWindow();
+      }
+    }, 4000);
+
+    // Fallback 3: Handle load errors or render process crashes gracefully
+    mainWindow.webContents.on('did-fail-load', (event, errorCode, errorDescription) => {
+      console.error('Failed to load main window:', errorCode, errorDescription);
+      showMainWindow();
+    });
+
+    mainWindow.webContents.on('render-process-gone', (event, details) => {
+      console.error('Render process gone:', details);
+      showMainWindow();
+    });
+
+    mainWindow.on('closed', () => {
+      clearTimeout(failsafeTimer);
+      mainWindow = null;
+    });
+  }
+
+  app.whenReady().then(() => {
+    cleanupStaleCache();
+    createWindow();
+
+    app.on('activate', () => {
+      if (BrowserWindow.getAllWindows().length === 0) {
+        createWindow();
+      }
+    });
+  });
 
 let activeTempPdfPath = null;
 
@@ -137,3 +223,5 @@ ipcMain.handle('save-pdf', async (event, tempPath) => {
     return { success: false, message: error.message };
   }
 });
+}
+

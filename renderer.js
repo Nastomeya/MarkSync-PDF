@@ -328,7 +328,11 @@ async function init() {
       clearTimeout(saveMarkdownTimer);
     }
     saveMarkdownTimer = setTimeout(() => {
-      localStorage.setItem('savedMarkdown', input.value);
+      try {
+        localStorage.setItem('savedMarkdown', input.value);
+      } catch (e) {
+        console.warn('Could not save markdown to localStorage:', e);
+      }
     }, 500);
   }
 
@@ -360,9 +364,13 @@ async function init() {
   }
 
   // Load saved text if available
-  const savedContent = localStorage.getItem('savedMarkdown');
-  if (savedContent !== null) {
-    input.value = savedContent;
+  try {
+    const savedContent = localStorage.getItem('savedMarkdown');
+    if (savedContent !== null) {
+      input.value = savedContent;
+    }
+  } catch (e) {
+    console.warn('Could not read saved markdown from localStorage:', e);
   }
 
   input.addEventListener('input', () => {
@@ -512,11 +520,17 @@ async function init() {
     if (files.length > 0) {
       const file = files[0];
       if (file.name.endsWith('.md') || file.name.endsWith('.txt')) {
-        const content = fs.readFileSync(file.path, 'utf8');
-        input.value = content;
-        localStorage.setItem('savedMarkdown', content);
-        updatePreview();
-        showToast('Document loaded: ' + file.name, 'info');
+        try {
+          const content = fs.readFileSync(file.path, 'utf8');
+          input.value = content;
+          try {
+            localStorage.setItem('savedMarkdown', content);
+          } catch (_) {}
+          updatePreview();
+          showToast('Document loaded: ' + file.name, 'info');
+        } catch (err) {
+          showToast('Failed to read file: ' + err.message, 'error');
+        }
       } else {
         showToast('Please drop a valid .md or .txt file.', 'warning');
       }
@@ -572,4 +586,6 @@ async function init() {
   updatePreview();
 }
 
-init();
+init().catch((err) => {
+  console.error('Failed to initialize renderer:', err);
+});
