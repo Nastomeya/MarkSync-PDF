@@ -31,6 +31,7 @@ function createWindow() {
 	icon: path.join(__dirname, 'assets', 'icon.png'), 
     webPreferences: {
       nodeIntegration: true,
+      nodeIntegrationInWorker: true,
       contextIsolation: false,
       plugins: true,
       webviewTag: true

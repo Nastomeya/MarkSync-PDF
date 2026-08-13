@@ -243,10 +243,73 @@ async function init() {
   input.addEventListener('scroll', syncEditorToPreview, { passive: true });
   previewPane.addEventListener('scroll', syncPreviewToEditor, { passive: true });
 
-  // High-performance debounced preview & save pipeline
+  // ============================================================
+  // Off-Main-Thread Markdown Parse Pipeline (Web Worker)
+  // ============================================================
+  let parseWorker = null;
+  let workerReady = false;
   let updatePreviewTimer = null;
   let saveMarkdownTimer = null;
   let renderVersion = 0;
+
+  // Attempt to start the background parse worker
+  try {
+    parseWorker = new Worker('parseWorker.js');
+    
+    parseWorker.onmessage = function(e) {
+      if (e.data.type === 'ready') {
+        workerReady = true;
+        return;
+      }
+      
+      if (e.data.type === 'parsed') {
+        // Discard stale results — a newer keystroke already fired
+        if (e.data.version !== renderVersion) return;
+        
+        // Fast DOM update on the main thread (just innerHTML assignment)
+        output.innerHTML = e.data.html;
+        
+        // Mermaid requires DOM access; render it on main thread
+        handleMermaidRender(e.data.version);
+      }
+    };
+    
+    parseWorker.onerror = function(err) {
+      console.warn('Parse worker error, falling back to main-thread:', err);
+      workerReady = false;
+    };
+  } catch (e) {
+    console.warn('Web Worker not available, using main-thread parsing:', e);
+  }
+
+  // Mermaid post-processing (must run on main thread for DOM access)
+  async function handleMermaidRender(version) {
+    if (output.querySelector('.mermaid')) {
+      try {
+        await ensureMermaidLoaded();
+        if (version !== renderVersion) return;
+        await mermaid.run({
+          querySelector: '#previewOutput .mermaid'
+        });
+      } catch (err) {
+        console.debug('Mermaid render info:', err);
+      }
+    }
+    
+    if (version !== renderVersion) return;
+    syncEditorToPreview();
+  }
+
+  // Adaptive debounce: scales delay based on document size so large
+  // documents don't fire expensive re-parses too frequently while
+  // small documents stay snappy.
+  function getDebounceDelay() {
+    const len = input.value.length;
+    if (len < 2000) return 80;        // Small doc: fast updates
+    if (len < 8000) return 150;       // Medium doc
+    if (len < 20000) return 250;      // Large doc
+    return 350;                        // Very large doc
+  }
 
   function scheduleUpdatePreview(immediate = false) {
     if (updatePreviewTimer) {
@@ -256,7 +319,7 @@ async function init() {
     if (immediate) {
       executeUpdatePreview();
     } else {
-      updatePreviewTimer = setTimeout(executeUpdatePreview, 100);
+      updatePreviewTimer = setTimeout(executeUpdatePreview, getDebounceDelay());
     }
   }
 
@@ -266,34 +329,32 @@ async function init() {
     }
     saveMarkdownTimer = setTimeout(() => {
       localStorage.setItem('savedMarkdown', input.value);
-    }, 400);
+    }, 500);
   }
 
-  async function executeUpdatePreview() {
+  function executeUpdatePreview() {
     const currentVersion = ++renderVersion;
-    
-    // Fast Markdown parse
-    output.innerHTML = marked.parse(input.value);
+    const markdown = input.value;
 
-    // Asynchronous Mermaid rendering with stale-render prevention
-    if (output.querySelector('.mermaid')) {
+    // Prefer Worker (off-thread) when available
+    if (parseWorker && workerReady) {
+      parseWorker.postMessage({
+        type: 'parse',
+        markdown: markdown,
+        version: currentVersion
+      });
+    } else {
+      // Synchronous fallback (main-thread parsing)
       try {
-        await ensureMermaidLoaded();
-        if (currentVersion !== renderVersion) return; // Stale render, discard
-        await mermaid.run({
-          querySelector: '#previewOutput .mermaid'
-        });
+        output.innerHTML = marked.parse(markdown);
+        handleMermaidRender(currentVersion);
       } catch (err) {
-        console.debug('Mermaid render info:', err);
+        console.error('Parse error:', err);
       }
     }
-
-    if (currentVersion !== renderVersion) return;
-
-    syncEditorToPreview();
   }
 
-  // Alias for backward compatibility
+  // Backward-compatible alias used by drag-drop, initial load, etc.
   function updatePreview() {
     scheduleUpdatePreview(true);
   }
