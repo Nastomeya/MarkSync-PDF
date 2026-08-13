@@ -152,6 +152,7 @@ async function init() {
 
   const input = document.getElementById('markdownInput');
   const output = document.getElementById('previewOutput');
+  const previewPane = document.querySelector('.preview-pane');
   const exportBtn = document.getElementById('exportBtn');
   const helpBtn = document.getElementById('helpBtn');
   const pdfModal = document.getElementById('pdfModal');
@@ -188,19 +189,113 @@ async function init() {
     }
   }
 
-  async function updatePreview() {
-    output.innerHTML = marked.parse(input.value);
+  // Synchronized Scrolling Logic (Permanently Active, Optimized with RAF)
+  let isScrolling = null; // 'editor' | 'preview' | null
+  let scrollTimeout = null;
+  let isSyncingRaf = false;
+
+  function syncEditorToPreview() {
+    if (isScrolling === 'preview') return;
+    isScrolling = 'editor';
+    clearTimeout(scrollTimeout);
+
+    if (!isSyncingRaf) {
+      isSyncingRaf = true;
+      requestAnimationFrame(() => {
+        const maxScrollTopInput = input.scrollHeight - input.clientHeight;
+        const maxScrollTopPreview = previewPane.scrollHeight - previewPane.clientHeight;
+        if (maxScrollTopInput > 0 && maxScrollTopPreview > 0) {
+          const ratio = input.scrollTop / maxScrollTopInput;
+          previewPane.scrollTop = ratio * maxScrollTopPreview;
+        }
+        isSyncingRaf = false;
+      });
+    }
+
+    scrollTimeout = setTimeout(() => {
+      isScrolling = null;
+    }, 60);
+  }
+
+  function syncPreviewToEditor() {
+    if (isScrolling === 'editor') return;
+    isScrolling = 'preview';
+    clearTimeout(scrollTimeout);
+
+    if (!isSyncingRaf) {
+      isSyncingRaf = true;
+      requestAnimationFrame(() => {
+        const maxScrollTopInput = input.scrollHeight - input.clientHeight;
+        const maxScrollTopPreview = previewPane.scrollHeight - previewPane.clientHeight;
+        if (maxScrollTopInput > 0 && maxScrollTopPreview > 0) {
+          const ratio = previewPane.scrollTop / maxScrollTopPreview;
+          input.scrollTop = ratio * maxScrollTopInput;
+        }
+        isSyncingRaf = false;
+      });
+    }
+
+    scrollTimeout = setTimeout(() => {
+      isScrolling = null;
+    }, 60);
+  }
+
+  input.addEventListener('scroll', syncEditorToPreview, { passive: true });
+  previewPane.addEventListener('scroll', syncPreviewToEditor, { passive: true });
+
+  // High-performance debounced preview & save pipeline
+  let updatePreviewTimer = null;
+  let saveMarkdownTimer = null;
+  let renderVersion = 0;
+
+  function scheduleUpdatePreview(immediate = false) {
+    if (updatePreviewTimer) {
+      clearTimeout(updatePreviewTimer);
+      updatePreviewTimer = null;
+    }
+    if (immediate) {
+      executeUpdatePreview();
+    } else {
+      updatePreviewTimer = setTimeout(executeUpdatePreview, 100);
+    }
+  }
+
+  function scheduleSave() {
+    if (saveMarkdownTimer) {
+      clearTimeout(saveMarkdownTimer);
+    }
+    saveMarkdownTimer = setTimeout(() => {
+      localStorage.setItem('savedMarkdown', input.value);
+    }, 400);
+  }
+
+  async function executeUpdatePreview() {
+    const currentVersion = ++renderVersion;
     
+    // Fast Markdown parse
+    output.innerHTML = marked.parse(input.value);
+
+    // Asynchronous Mermaid rendering with stale-render prevention
     if (output.querySelector('.mermaid')) {
       try {
         await ensureMermaidLoaded();
+        if (currentVersion !== renderVersion) return; // Stale render, discard
         await mermaid.run({
           querySelector: '#previewOutput .mermaid'
         });
       } catch (err) {
-        console.error('Mermaid render error:', err);
+        console.debug('Mermaid render info:', err);
       }
     }
+
+    if (currentVersion !== renderVersion) return;
+
+    syncEditorToPreview();
+  }
+
+  // Alias for backward compatibility
+  function updatePreview() {
+    scheduleUpdatePreview(true);
   }
 
   // Load saved text if available
@@ -210,8 +305,8 @@ async function init() {
   }
 
   input.addEventListener('input', () => {
-    localStorage.setItem('savedMarkdown', input.value);
-    updatePreview();
+    scheduleSave();
+    scheduleUpdatePreview(false);
   });
 
   exportBtn.addEventListener('click', async () => {

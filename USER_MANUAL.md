@@ -9,6 +9,7 @@ Welcome to **MarkSync PDF**, a modern desktop studio designed to convert Markdow
 * **Real-Time Split-Pane Workspace:** Distraction-free editing on the left with instant, synchronized rendering on the right.
 * **Dynamic Typography Controls:** Real-time toolbar sliders for **Font Size**, **Title Size**, **Line Spacing**, and **Paragraph Gaps** with immediate preview feedback and PDF carry-over.
 * **Table Border Customization:** Easily toggle between bordered and clean borderless table layouts.
+* **Built-in Synchronized Split Scrolling:** Seamless bi-directional synchronized scrolling keeps the editor and rendered preview panes in perfect alignment as you write or scroll.
 * **One-Click Syntax Copy:** Instant copy buttons on every code block and syntax template for rapid learning and pasting.
 * **Drag-and-Drop File Import:** Drop any `.md` or `.txt` file onto the window to open its contents instantly.
 * **Advanced Markdown Formatting:**
@@ -25,9 +26,10 @@ Welcome to **MarkSync PDF**, a modern desktop studio designed to convert Markdow
 ## 2. Getting Started & How to Use
 
 ### Writing and Importing Content
-1. **Type directly** into the left editor pane. The preview pane on the right updates instantaneously.
-2. **Drag & Drop:** Drag any `.md` or `.txt` file from Windows Explorer and drop it anywhere over the application window to load it.
-3. **Auto-Save:** Your current document is automatically preserved locally across application sessions.
+1. **Type directly** into the left editor pane. The preview pane on the right updates instantaneously with zero input lag.
+2. **Automatic Synchronized Scrolling:** As you scroll through the editor, the preview automatically scrolls to match your position in the document (and vice-versa), so you always see the corresponding rendered output immediately.
+3. **Drag & Drop:** Drag any `.md` or `.txt` file from Windows Explorer and drop it anywhere over the application window to load it.
+4. **Auto-Save:** Your current document is automatically preserved locally across application sessions.
 
 ### Adjusting Layout with Dynamic Sliders
 Use the **Format Preview** toolbar at the top of the window to fine-tune your document layout:
