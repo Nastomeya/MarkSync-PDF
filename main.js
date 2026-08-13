@@ -7,9 +7,26 @@ const os = require('os');
 app.disableHardwareAcceleration();
 
 function createWindow() {
+  // 1. Create and show Splash Screen immediately
+  const splash = new BrowserWindow({
+    width: 500,
+    height: 350,
+    frame: false,
+    alwaysOnTop: true,
+    backgroundColor: '#0b0f19',
+    icon: path.join(__dirname, 'assets', 'icon.png'),
+    webPreferences: {
+      nodeIntegration: false,
+      contextIsolation: true
+    }
+  });
+  splash.loadFile('splash.html');
+
+  // 2. Create Main Window (hidden initially)
   const win = new BrowserWindow({
     width: 1200,
     height: 800,
+    show: false, // <--- Crucial: Hide until loaded
     backgroundColor: '#0b0f19',
 	icon: path.join(__dirname, 'assets', 'icon.png'), 
     webPreferences: {
@@ -26,6 +43,18 @@ function createWindow() {
   });
 
   win.loadFile('index.html');
+
+  // 3. When main window is fully rendered, swap them
+  win.once('ready-to-show', () => {
+    // Optional tiny delay to ensure all CSS/fonts are fully painted
+    setTimeout(() => {
+      if (!splash.isDestroyed()) {
+        splash.destroy();
+      }
+      win.show();
+      win.focus();
+    }, 500);
+  });
 }
 
 app.whenReady().then(() => {
