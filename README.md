@@ -7,6 +7,7 @@
   </p>
   <p>
     <a href="https://jctool.itch.io/marksync-pdf">Download / itch.io</a> •
+    <a href="#demo">Demo</a> •
     <a href="#features">Features</a> •
     <a href="#getting-started">Getting Started</a> •
     <a href="#building-for-windows">Building</a> •
@@ -22,6 +23,18 @@
 
 <p align="center">
   <img src="Resources/screenShots01.png" alt="MarkSync PDF Split-Pane Editor and Live Preview" width="850" />
+</p>
+
+---
+
+## Demo
+
+<p align="center">
+  <a href="https://youtu.be/kvczMZdUnWw" target="_blank">
+    <img src="https://img.youtube.com/vi/kvczMZdUnWw/maxresdefault.jpg" alt="Watch MarkSync PDF Demo on YouTube" width="760" />
+  </a>
+  <br />
+  <sub>Click the thumbnail above to watch the demo video on YouTube.</sub>
 </p>
 
 ---
