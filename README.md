@@ -126,6 +126,7 @@ MarkSync-PDF/
 ├── parseWorker.js     # Web Worker for off-thread marked + highlight.js + KaTeX parsing
 ├── styles.css         # App theme, Markdown styling, alerts, and @media print PDF rules
 ├── USER_MANUAL.md     # In-app user manual and Markdown syntax reference
+├── LICENSE            # Proprietary license (All Rights Reserved)
 ├── package.json       # Dependencies, scripts, and electron-builder configuration
 ├── assets/            # App icons and branding assets
 ├── build/             # Windows installer icons and NSIS script (installer.nsh)
@@ -136,4 +137,6 @@ MarkSync-PDF/
 
 ## License
 
-This project is marked `UNLICENSED` in `package.json`. See the repository owner (**JCTool**) for distribution and usage terms.
+Copyright © 2026 **JCTool**. **All Rights Reserved.**
+
+This project is proprietary software (`"license": "UNLICENSED"` in `package.json`). You may **not** copy, modify, redistribute, repackage, or sell the source code or compiled binaries without prior written permission. See [LICENSE](LICENSE) for full terms, or obtain an official licensed copy at [jctool.itch.io/marksync-pdf](https://jctool.itch.io/marksync-pdf).
